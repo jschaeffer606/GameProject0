@@ -1,0 +1,3 @@
+﻿Content/miner.png -- Created by Jack Schaeffer
+Conntetn/dynamite.png -- created by Jack Schaeffer
+content/Background.png -- created by Jack Schaeffer
