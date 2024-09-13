@@ -26,23 +26,33 @@ namespace GameProject0
 
         private BoundingCircle bounds;
 
+        /// <summary>
+        /// Bounding Volume of the sprice
+        /// </summary>
+        public BoundingCircle Bounds => bounds;
+
+        public bool Collected { get; set; } = false;
+
+
+
+
         public bool flipped { get; set; } = false;
 
 
         /// <summary>
-        /// Creates a new coin sprite
+        /// Creates a new dynamite sprite
         /// </summary>
         /// <param name="position">The position of the sprite in the game</param>
         public DynamiteSprite(Vector2 position)
         {
             this.position = position;
-            this.bounds = new BoundingCircle(position - new Vector2(-8, -8), 8);
+            this.bounds = new BoundingCircle(position - new Vector2(-16, -16), 16);
         }
 
         /// <summary>
         /// Loads the sprite texture using the provided ContentManager
         /// </summary>
-        /// <param name="content">The ContentManager to load with</param>
+        /// <param name="content">The ContentManager to load with</param>4
         public void LoadContent(ContentManager content)
         {
             texture = content.Load<Texture2D>("Dynamite");
@@ -64,6 +74,7 @@ namespace GameProject0
             SpriteEffects spriteEffects = (flipped) ? SpriteEffects.FlipVertically : SpriteEffects.None;
 
             spriteBatch.Draw(texture, position, source, Color.White, 0, new Vector2(64, 64), 1f, spriteEffects, 0);
+           
 
         
         }

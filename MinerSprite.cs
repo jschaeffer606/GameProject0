@@ -24,7 +24,9 @@ namespace GameProject0
         private KeyboardState keyboardState;
 
         private Texture2D texture;
-       
+
+
+
 
 
         private Vector2 position = new Vector2(300, 200);
@@ -38,7 +40,7 @@ namespace GameProject0
 
  
 
-        private BoundingRectangle bounds = new BoundingRectangle(new Vector2(200 - 16, 200 - 16), 32, 32);
+        private BoundingRectangle bounds = new BoundingRectangle(new Vector2(300 - 8, 200 - 4), 24, 24);
 
         public BoundingRectangle Bounds => bounds;
 
@@ -58,19 +60,53 @@ namespace GameProject0
         /// <param name="gameTime">The GameTime</param>
         public void Update(GameTime gameTime)
         {
+            bool moving = false;
+            keyboardState = Keyboard.GetState();
 
 
-            directionTimer += gameTime.ElapsedGameTime.TotalSeconds;
+            animationTimer += gameTime.ElapsedGameTime.TotalSeconds;
 
-            //Switch directions every 2 seconds
-            if (directionTimer > 3.5)
+
+            if (animationTimer > 0.2)
             {
-                flipped = !flipped;
+                animationFrame++;
+                if (animationFrame > 1) animationFrame = 0;
+                animationTimer -= .2;
 
-                directionTimer -= 3.5;
             }
 
-            if(flipped)
+
+
+
+
+
+            if (keyboardState.IsKeyDown(Keys.Up) || keyboardState.IsKeyDown(Keys.W)) { position += new Vector2(0, -1); moving = true; }
+            if (keyboardState.IsKeyDown(Keys.Down) || keyboardState.IsKeyDown(Keys.S)) { position += new Vector2(0, 1); moving = true; }
+            if (keyboardState.IsKeyDown(Keys.Left) || keyboardState.IsKeyDown(Keys.A))
+            {
+                position += new Vector2(-1, 0);
+                flipped = true;
+                moving = true;
+            }
+            if (keyboardState.IsKeyDown(Keys.Right) || keyboardState.IsKeyDown(Keys.D))
+            {
+                position += new Vector2(1, 0);
+                flipped = false;
+                moving = true;
+            }
+            if(!moving)
+            {
+
+
+                animationFrame = 0;
+            }
+
+
+
+
+            //autowalk
+            /*
+            if (flipped)
             {
                 position += new Vector2(-1, 0) * 100 * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
@@ -78,7 +114,10 @@ namespace GameProject0
             {
                 position += new Vector2(1, 0 ) * 100 * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
-
+            */
+            moving = false;
+            bounds.X = position.X - 32;
+            bounds.Y = position.Y - 32;
         }
 
         /// <summary>
@@ -89,19 +128,12 @@ namespace GameProject0
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
 
-            animationTimer += gameTime.ElapsedGameTime.TotalSeconds;
+            
 
 
             SpriteEffects spriteEffects = (flipped) ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
             
 
-            if (animationTimer > 0.2)
-            {
-                animationFrame++;
-                if (animationFrame > 1) animationFrame = 0;
-                animationTimer -= .2;
-
-            }
 
             var source = new Rectangle(0, animationFrame * 32, 32, 32);
 
