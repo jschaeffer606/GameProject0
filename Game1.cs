@@ -1,7 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
+using GameProject0.StateManagement;
+using GameProject0.Screens;
 
 
 
@@ -13,7 +16,12 @@ namespace GameProject0
         private SpriteBatch _spriteBatch;
         private SpriteFont spriteFont;
         private Texture2D _backGround;
+        private SoundEffect _dynCollect;
+        private Song _fire_level;
 
+
+
+        private readonly ScreenManager _screenManager;
 
         private DynamiteSprite[] _dynamiteGroup;
 
@@ -36,38 +44,39 @@ namespace GameProject0
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+
+            var screenFactory = new ScreenFactory();
+            Services.AddService(typeof(IScreenFactory), screenFactory);
+
+            _screenManager = new ScreenManager(this);
+            _screenManager.Visible = true;
+            Components.Add(_screenManager);
+
+            AddInitialScreens();
+        }
+
+        private void AddInitialScreens()
+        {
+            _screenManager.AddScreen(new BackgroundScreen(), null);
+            _screenManager.AddScreen(new MainMenuScreen(), null);
+            
+
         }
 
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
 
-            _miner = new MinerSprite();
-
-            System.Random rand = new System.Random();
-
-
-            _dynamiteGroup = new DynamiteSprite[]
-            {
-
-                new DynamiteSprite(new Vector2((float)rand.NextDouble() * GraphicsDevice.Viewport.Width, (float)rand.NextDouble() * GraphicsDevice.Viewport.Height)),
-                new DynamiteSprite(new Vector2((float)rand.NextDouble() * GraphicsDevice.Viewport.Width, (float)rand.NextDouble() * GraphicsDevice.Viewport.Height)),
-                new DynamiteSprite(new Vector2((float)rand.NextDouble() * GraphicsDevice.Viewport.Width, (float)rand.NextDouble() * GraphicsDevice.Viewport.Height))
-                
-            };
-
-            _dynamiteCounter = _dynamiteGroup.Length;
-            _maxTime = 30;
+            
+            
 
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
-            spriteFont = Content.Load<SpriteFont>("FONT");
-            _miner.LoadContent(Content);
-            _backGround = Content.Load<Texture2D>("BackGround");
+            
+            /*
 
             foreach (var dyn in _dynamiteGroup)
             {
@@ -75,15 +84,17 @@ namespace GameProject0
                 
 
             }
-
+            */
             // TODO: use this.Content to load your game content here
         }
 
         protected override void Update(GameTime gameTime)
         {
+            
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
+            /*
+          
 
 
             // TODO: Add your update logic here
@@ -95,6 +106,8 @@ namespace GameProject0
                 {
                     dynamite.Collected = true;
                     _dynamiteCounter--;
+                    _dynCollect.Play();
+
                 }
             }
 
@@ -108,58 +121,18 @@ namespace GameProject0
                 _gameOver = true;
             };
 
-
+            */
 
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            if(_gameOver)
-            {
-                GraphicsDevice.Clear(Color.White);
-                _spriteBatch.Begin();
-                _spriteBatch.Draw(_backGround, new Rectangle(0, 0, 800, 480), Color.White);
-                _spriteBatch.DrawString(spriteFont, _gameWon ? $"You Won!" : $"You Lost!", new Vector2(200, 200), Color.Red, 0f, new Vector2(0, 0), 1.5f, SpriteEffects.None, 1);
-                base.Draw(gameTime);
-                _spriteBatch.End();
-            }
-            else
-            {
-                GraphicsDevice.Clear(Color.White);
-                _spriteBatch.Begin();
-                _spriteBatch.Draw(_backGround, new Rectangle(0, 0, 800, 480), Color.White);
+            GraphicsDevice.Clear(Color.CornflowerBlue);
+            base.Draw(gameTime);    // The real drawing happens inside the ScreenManager component
+            
 
-
-                // TODO: Add your drawing code here
-
-                /*
-                _spriteBatch.DrawString(spriteFont , $"Welcome to the game! Press Escape to exit", new Vector2(200, 200), Color.Black);
-                _spriteBatch.DrawString(spriteFont, $"DOWNWARDS", new Vector2(200,250), Color.Black,0,new Vector2(0,0), 3f, SpriteEffects.None, 1);
-                */
-
-                _spriteBatch.DrawString(spriteFont, $"Collect all the dynamite before it explodes!", new Vector2(200, 50), Color.Red, 0f, new Vector2(0, 0), 1.5f, SpriteEffects.None, 1);
-                _spriteBatch.DrawString(spriteFont, $"Dynamite Left: {_dynamiteCounter}", new Vector2(50, 50), Color.White);
-                _spriteBatch.DrawString(spriteFont, $"Time Left: {(int)(_maxTime - gameTime.TotalGameTime.TotalSeconds)}", new Vector2(50, 100), Color.White);
-
-
-                _miner.Draw(gameTime, _spriteBatch);
-
-                foreach (var dyn in _dynamiteGroup)
-                {
-                    if (!dyn.Collected)
-                    {
-                        dyn.Draw(gameTime, _spriteBatch);
-                    }
-                }
-
-
-
-
-                base.Draw(gameTime);
-                _spriteBatch.End();
-
-            }
+        }
 
 
 
@@ -170,4 +143,3 @@ namespace GameProject0
 
 
     }
-}

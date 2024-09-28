@@ -13,6 +13,12 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin Danish Mega Pony v. 4 OST - Track 02 (Fire Level).mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Danish Mega Pony v. 4 OST - Track 02 (Fire Level).mp3
+
 #begin Dynamite.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -38,6 +44,18 @@
 /processorParam:TextureFormat=Compressed
 /build:FONT.spritefont
 
+#begin gradient.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gradient.png
+
 #begin Miner.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -49,6 +67,12 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Miner.png
+
+#begin Pickup_Coin2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Pickup_Coin2.wav
 
 #begin pixilart-drawing.png
 /importer:TextureImporter

@@ -1,0 +1,46 @@
+﻿using Microsoft.Xna.Framework;
+using GameProject0.StateManagement;
+using GameProject0.Screens;
+using GameArchitectureExample.Screens;
+
+namespace GameProject0.Screens
+{
+    // The main menu screen is the first thing displayed when the game starts up.
+    public class MainMenuScreen : MenuScreen
+    {
+        public MainMenuScreen() : base("Main Menu")
+        {
+            var playGameMenuEntry = new MenuEntry("Play Game");
+            
+            var exitMenuEntry = new MenuEntry("Exit");
+            
+            playGameMenuEntry.Selected += PlayGameMenuEntrySelected;
+            exitMenuEntry.Selected += OnCancel;
+
+            MenuEntries.Add(playGameMenuEntry);
+            
+            MenuEntries.Add(exitMenuEntry);
+        }
+
+        private void PlayGameMenuEntrySelected(object sender, PlayerIndexEventArgs e)
+        {
+            LoadingScreen.Load(ScreenManager, true, e.PlayerIndex, new GameplayScreen());
+        }
+
+ 
+        protected override void OnCancel(PlayerIndex playerIndex)
+        {
+            const string message = "Are you sure you want to exit the game?";
+            var confirmExitMessageBox = new MessageBoxScreen(message);
+
+            confirmExitMessageBox.Accepted += ConfirmExitMessageBoxAccepted;
+
+            ScreenManager.AddScreen(confirmExitMessageBox, playerIndex);
+        }
+
+        private void ConfirmExitMessageBoxAccepted(object sender, PlayerIndexEventArgs e)
+        {
+            ScreenManager.Game.Exit();
+        }
+    }
+}
